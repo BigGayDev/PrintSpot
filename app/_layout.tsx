@@ -1,9 +1,15 @@
+// Expo
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
+import { Stack/*, useRouter*/ } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
+// React
 import { useEffect } from 'react';
+// Clerk
+import { ClerkProvider/*, useAuth*/ } from '@clerk/clerk-expo';
+
+const CLERK_PUBLISHABLE_KEY = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY;
 
 import { useColorScheme } from '@/components/useColorScheme';
 
@@ -41,11 +47,24 @@ export default function RootLayout() {
     return null;
   }
 
-  return <RootLayoutNav />;
+  return (
+    <ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY!}>
+      <RootLayoutNav />
+    </ClerkProvider>
+  );
 }
 
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
+  /*const { isLoaded, isSignedIn } = useAuth();
+  const router = useRouter();
+
+  // Automatically open login if user is not authenticated
+  useEffect(() => {
+    if (isLoaded && !isSignedIn) {
+      router.push('/(modals)/login');
+    }
+  }, [isLoaded]);*/
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
