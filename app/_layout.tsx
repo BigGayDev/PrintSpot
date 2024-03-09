@@ -8,8 +8,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 // Clerk
 import { ClerkProvider/*, useAuth*/ } from '@clerk/clerk-expo';
-
-const CLERK_PUBLISHABLE_KEY = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY;
+import CLERK_PUBLISHABLE_KEY from '@/constants/PublishableKey';
 
 import { useColorScheme } from '@/components/useColorScheme';
 
