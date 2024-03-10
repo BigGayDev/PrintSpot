@@ -8,8 +8,9 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 // Clerk
 import { ClerkProvider/*, useAuth*/ } from '@clerk/clerk-expo';
+// Constants
 import CLERK_PUBLISHABLE_KEY from '@/constants/PublishableKey';
-
+// Components
 import { useColorScheme } from '@/components/useColorScheme';
 
 export {
@@ -50,7 +51,7 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
-  const colorScheme = useColorScheme();
+  const colorScheme = useColorScheme(); // ! Fix this
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
