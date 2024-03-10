@@ -29,7 +29,7 @@ export const unstable_settings = {
 SplashScreen.preventAutoHideAsync();
 
 // Token cache
-const tokenCache = {
+const tokenCache = { // ! Fix this
   async getToken(key: string) {
     try {
       return getItemAsync(key);
