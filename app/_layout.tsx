@@ -37,17 +37,13 @@ export default function RootLayout() {
   }, [error]);
 
   useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
+    if (loaded) SplashScreen.hideAsync();
   }, [loaded]);
 
-  if (!loaded) {
-    return null;
-  }
+  if (!loaded) return null;
 
   return (
-    <ClerkProvider publishableKey={CLERK_PUBLISHABLE_KEY!}>
+    <ClerkProvider tokenCache={tokenCache} publishableKey={CLERK_PUBLISHABLE_KEY!}>
       <RootLayoutNav />
     </ClerkProvider>
   );
@@ -55,15 +51,6 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
-  /*const { isLoaded, isSignedIn } = useAuth();
-  const router = useRouter();
-
-  // Automatically open login if user is not authenticated
-  useEffect(() => {
-    if (isLoaded && !isSignedIn) {
-      router.push('/(modals)/login');
-    }
-  }, [isLoaded]);*/
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
