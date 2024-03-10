@@ -12,6 +12,8 @@ import { ClerkProvider/*, useAuth*/ } from '@clerk/clerk-expo';
 import CLERK_PUBLISHABLE_KEY from '@/constants/PublishableKey';
 // Components
 import { useColorScheme } from '@/components/useColorScheme';
+// Cache
+import { getItemAsync, setItemAsync } from 'expo-secure-store';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -25,6 +27,25 @@ export const unstable_settings = {
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
+
+// Token cache
+const tokenCache = {
+  async getToken(key: string) {
+    try {
+      return getItemAsync(key);
+    } catch (err) {
+      return null;
+    }
+  },
+  async saveToken(key: string, value: string) {
+    try {
+      return setItemAsync(key, value);
+    } catch (err) {
+      return;
+    }
+  },
+};
+
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
