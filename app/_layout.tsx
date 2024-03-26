@@ -14,7 +14,7 @@ import CLERK_PUBLISHABLE_KEY from '@/constants/PublishableKey';
 // Components
 // import { useColorScheme } from '@/components/useColorScheme';
 // Cache
-import { getItemAsync, setItemAsync } from 'expo-secure-store';
+import * as SecureStore from 'expo-secure-store';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -33,14 +33,14 @@ SplashScreen.preventAutoHideAsync();
 const tokenCache = { // ! Fix this
   async getToken(key: string) {
     try {
-      return getItemAsync(key);
+      return SecureStore.getItemAsync(key);
     } catch (err) {
       return null;
     }
   },
   async saveToken(key: string, value: string) {
     try {
-      return setItemAsync(key, value);
+      return SecureStore.setItemAsync(key, value);
     } catch (err) {
       return;
     }
