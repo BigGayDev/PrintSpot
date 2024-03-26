@@ -1,6 +1,7 @@
 // Expo
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+// import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { NativeBaseProvider } from "native-base";
 import { useFonts } from 'expo-font';
 import { Stack/*, useRouter*/ } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
@@ -11,7 +12,7 @@ import { ClerkProvider/*, useAuth*/ } from '@clerk/clerk-expo';
 // Constants
 import CLERK_PUBLISHABLE_KEY from '@/constants/PublishableKey';
 // Components
-import { useColorScheme } from '@/components/useColorScheme';
+// import { useColorScheme } from '@/components/useColorScheme';
 // Cache
 import { getItemAsync, setItemAsync } from 'expo-secure-store';
 
@@ -72,14 +73,16 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
-  const colorScheme = useColorScheme(); // ! Fix this
+  // const colorScheme = useColorScheme(); // ! Fix this
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    // <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <NativeBaseProvider>
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
       </Stack>
-    </ThemeProvider>
+    </NativeBaseProvider>
+    // </ThemeProvider>
   );
 }
