@@ -10,7 +10,7 @@ import { useEffect } from 'react';
 // Clerk
 import { ClerkProvider/*, useAuth*/ } from '@clerk/clerk-expo';
 // Constants
-import CLERK_PUBLISHABLE_KEY from '@/constants/PublishableKey';
+const CLERK_PUBLISHABLE_KEY: string | undefined = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY;
 // Components
 // import { useColorScheme } from '@/components/useColorScheme';
 // Cache
