@@ -1,12 +1,13 @@
 // UI
-import { Input, Icon, Stack, Pressable, Button } from "native-base";
-import { MaterialIcons } from "@expo/vector-icons";
+import { Input, Icon, Stack, Pressable, Button } from 'native-base';
+import { MaterialIcons } from '@expo/vector-icons';
 // React
 import { useState } from 'react';
+import { Link } from 'expo-router';
 // Clerk 
 import { useSignUp } from '@clerk/clerk-expo';
 
-export default function SignUp() {
+export default function SignUp() { // ! Fix this
   // UI hooks
   const [hidden, setHidden] = useState(true);
   // Clerk hooks
@@ -21,7 +22,7 @@ export default function SignUp() {
 
   // Functions
   const onSignUp = async () => {
-    if (!isLoaded) return;
+    if (!isLoaded) return; // ! Clerk not loaded
 
     try {
       await signUp.create({
@@ -40,7 +41,7 @@ export default function SignUp() {
   }
 
   const onVerify = async () => {
-    if (!isLoaded) return;
+    if (!isLoaded) return; // ! Clerk not loaded
 
     try {
       const completeSignUp = await signUp.attemptEmailAddressVerification({ code });
@@ -51,69 +52,76 @@ export default function SignUp() {
     }
   }
 
-  if (!pendingVerification) return (
+  return (
     <Stack space={4} w="100%" alignItems="center">
-      <Input 
-        autoCapitalize="none"
-        value={firstName}
-        placeholder="First Name"
-        onChangeText={(firstName) => setFirstName(firstName)}
-        w={{ base: "75%", md: "25%" }}
-      />
+      {!pendingVerification && (
+      <>
+        <Input 
+          autoCapitalize="none"
+          value={firstName}
+          placeholder="First Name"
+          onChangeText={(firstName) => setFirstName(firstName)}
+          w={{ base: "75%", md: "25%" }}
+        />
 
-      <Input 
-        autoCapitalize="none"
-        value={lastName}
-        placeholder="Last Name"
-        onChangeText={(lastName) => setLastName(lastName)}
-        w={{ base: "75%", md: "25%" }}
-      />
+        <Input 
+          autoCapitalize="none"
+          value={lastName}
+          placeholder="Last Name"
+          onChangeText={(lastName) => setLastName(lastName)}
+          w={{ base: "75%", md: "25%" }}
+        />
 
-      <Input 
-        autoCapitalize="none"
-        value={emailAddress}
-        placeholder="Email"
-        onChangeText={(emailAddress) => setEmailAddress(emailAddress)}
-        w={{ base: "75%", md: "25%" }}
-      />
+        <Input 
+          autoCapitalize="none"
+          value={emailAddress}
+          placeholder="Email"
+          onChangeText={(emailAddress) => setEmailAddress(emailAddress)}
+          w={{ base: "75%", md: "25%" }}
+        />
 
-      <Input 
-        value={password}
-        secureTextEntry={hidden}
-        placeholder="Password"
-        onChangeText={(password) => setPassword(password)}
-        w={{ base: "75%", md: "25%" }}
-        InputRightElement={
-          <Pressable onPress={() => setHidden(!hidden)}>
-            <Icon as={<MaterialIcons name={hidden ? "visibility-off" : "visibility"} />} size={5} mr="2" color="muted.400" />
-          </Pressable>
-        }
-      />
+        <Input 
+          value={password}
+          secureTextEntry={hidden}
+          placeholder="Password"
+          onChangeText={(password) => setPassword(password)}
+          w={{ base: "75%", md: "25%" }}
+          InputRightElement={
+            <Pressable onPress={() => setHidden(!hidden)}>
+              <Icon as={<MaterialIcons name={hidden ? "visibility-off" : "visibility"} />} size={5} mr="2" color="muted.400" />
+            </Pressable>
+          }
+        />
 
-      <Button 
-        onPress={onSignUp} 
-        endIcon={<Icon as={MaterialIcons} name="person-add" size="sm" color="muted.400" />}
-      >
-        Sign up
-      </Button>
-    </Stack>
-  );
+        <Link href="/sign/in">
+          Already have an account? Sign in
+        </Link>
 
-  if (pendingVerification) return (
-    <Stack space={4} w="100%" alignItems="center">
-      <Input
-        value="code"
-        placeholder="Code"
-        onChangeText={(code) => setCode(code)}
-        w={{ base: "75%", md: "25%" }}
-      />
+        <Button 
+          onPress={onSignUp} 
+          endIcon={<Icon as={MaterialIcons} name="person-add" size="sm" color="muted.400" />}
+        >
+          Sign up
+        </Button>
+      </>
+      )}
+      {pendingVerification && (
+      <>
+        <Input
+          value="code"
+          placeholder="Code"
+          onChangeText={(code) => setCode(code)}
+          w={{ base: "75%", md: "25%" }}
+        />
 
-      <Button
-        onPress={onVerify}
-        endIcon={<Icon as={MaterialIcons} name="verified-user" size="sm" color="muted.400" />}
-      >
-        Verify Email
-      </Button>
+        <Button
+          onPress={onVerify}
+          endIcon={<Icon as={MaterialIcons} name="verified-user" size="sm" color="muted.400" />}
+        >
+          Verify Email
+        </Button>
+      </>
+      )}
     </Stack>
   );
 }

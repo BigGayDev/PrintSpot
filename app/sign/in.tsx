@@ -3,10 +3,11 @@ import { Input, Icon, Stack, Pressable, Button } from 'native-base';
 import { MaterialIcons } from '@expo/vector-icons';
 // React
 import { useState } from 'react';
+import { Link } from 'expo-router';
 // Clerk
 import { useSignIn } from '@clerk/clerk-expo';
 
-export default function SignIn() { // ? https://clerk.com/docs/quickstarts/expo#o-auth-sign-in
+export default function SignIn() { // ! Fix this
   // UI hooks
   const [hidden, setHidden] = useState(true);
   //Clerk hooks
@@ -17,7 +18,7 @@ export default function SignIn() { // ? https://clerk.com/docs/quickstarts/expo#
 
   // Function
   const onSignIn = async () => {
-    if (!isLoaded) return;
+    if (!isLoaded) return; // ! Clerk not loaded
 
     try {
       const completeSignIn = await signIn.create({
@@ -54,6 +55,10 @@ export default function SignIn() { // ? https://clerk.com/docs/quickstarts/expo#
           </Pressable>
         } 
       />
+
+      <Link href="/sign/up">
+        Don't have an account? Sign up
+      </Link>
 
       <Button 
         onPress={onSignIn} 
