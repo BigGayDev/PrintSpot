@@ -1,11 +1,13 @@
 import React from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Link, Tabs } from 'expo-router';
-import { Pressable } from 'react-native';
 
 import Colors from '@/constants/Colors';
 import { useColorScheme } from '@/components/useColorScheme';
 import { useClientOnlyValue } from '@/components/useClientOnlyValue';
+import { useUser } from "@clerk/clerk-expo";
+import { Avatar, Icon } from "native-base";
+import { MaterialIcons } from '@expo/vector-icons';
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
@@ -15,8 +17,27 @@ function TabBarIcon(props: {
   return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
 }
 
+function ProfileIcon() { // ! Fix onClick doesn't work on phones (use ExternalLink)
+  const { isLoaded, isSignedIn, user } = useUser();
+
+  if (!isLoaded || !isSignedIn) return (
+    <Link href="/sign/in" asChild>
+      <Avatar bg="white">
+        <MaterialIcons name="supervised-user-circle" size={56} color="black" />
+      </Avatar>
+    </Link>
+  );
+  else return (
+    <Link href="/modal" asChild> {/* Edit this using clerk account portal */}
+      <Avatar bg="indigo.500" source={{ uri: user?.imageUrl }}>
+        {(user.firstName || user.lastName) && user.firstName[0] + user.lastName[0]} 
+      </Avatar>
+    </Link>
+  );
+}
+
 export default function TabLayout() {
-  const colorScheme = useColorScheme(); // ! Fix this
+  const colorScheme = useColorScheme();
 
   return (
     <Tabs
@@ -25,26 +46,13 @@ export default function TabLayout() {
         // Disable the static render of the header on web
         // to prevent a hydration error in React Navigation v6.
         headerShown: useClientOnlyValue(false, true),
+        headerRight: ProfileIcon,
       }}>
       <Tabs.Screen
         name="index"
         options={{
           title: 'Tab One',
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="info-circle"
-                    size={25}
-                    color={Colors[colorScheme ?? 'light'].text}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
-          ),
         }}
       />
       <Tabs.Screen
