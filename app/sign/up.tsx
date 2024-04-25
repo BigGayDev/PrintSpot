@@ -1,15 +1,16 @@
-// Styles
-import global from '@/assets/styles/global';
+// UI
+import { Input, Icon, Stack, Pressable, Button } from 'native-base';
+import { MaterialIcons } from '@expo/vector-icons';
 // React
 import { useState } from 'react';
-// React Native
-import { TextInput, TouchableOpacity } from 'react-native'; // ! Replace with themed
-import { Text, View } from '@/components/Themed';
+import { Link } from 'expo-router';
 // Clerk 
 import { useSignUp } from '@clerk/clerk-expo';
 
 export default function SignUp() {
-  // Clerk hook
+  // UI hooks
+  const [hidden, setHidden] = useState(true);
+  // Clerk hooks
   const { isLoaded, signUp, setActive } = useSignUp();
   // States
   const [firstName, setFirstName] = useState('');
@@ -21,7 +22,7 @@ export default function SignUp() {
 
   // Functions
   const onSignUp = async () => {
-    if (!isLoaded) return;
+    if (!isLoaded) return; // ! Clerk not loaded
 
     try {
       await signUp.create({
@@ -40,7 +41,7 @@ export default function SignUp() {
   }
 
   const onVerify = async () => {
-    if (!isLoaded) return;
+    if (!isLoaded) return; // ! Clerk not loaded
 
     try {
       const completeSignUp = await signUp.attemptEmailAddressVerification({ code });
@@ -52,62 +53,75 @@ export default function SignUp() {
   }
 
   return (
-    <View style={global.container}>
+    <Stack space={4} w="100%" alignItems="center">
       {!pendingVerification && (
-        <View>
-        <View>
-            <TextInput
-              autoCapitalize="none"
-              value={firstName}
-              placeholder="First Name..."
-              onChangeText={(firstName) => setFirstName(firstName)}
-            />
-          </View>
-          <View>
-            <TextInput
-              autoCapitalize="none"
-              value={lastName}
-              placeholder="Last Name..."
-              onChangeText={(lastName) => setLastName(lastName)}
-            />
-          </View>
-          <View>
-            <TextInput
-              autoCapitalize="none"
-              value={emailAddress}
-              placeholder="Email..."
-              onChangeText={(email) => setEmailAddress(email)}
-            />
-          </View>
-          <View>
-            <TextInput
-              value={password}
-              placeholder="Password..."
-              placeholderTextColor="#000"
-              secureTextEntry={true}
-              onChangeText={(password) => setPassword(password)}
-            />
-          </View>
-          <TouchableOpacity onPress={onSignUp}>
-            <Text>Sign up</Text>
-          </TouchableOpacity>
-        </View>
-      )}
+      <>
+        <Input 
+          autoCapitalize="none"
+          value={firstName}
+          placeholder="First Name"
+          onChangeText={(firstName) => setFirstName(firstName)}
+          w={{ base: "75%", md: "25%" }}
+        />
 
-      {pendingVerification && (
-        <View>
-          <View>
-            <TextInput
-              value={code}
-              placeholder="Code..."
-              onChangeText={(code) => setCode(code)}
-            />
-          </View>
-          <TouchableOpacity onPress={onVerify}>
-            <Text>Verify Email</Text>
-          </TouchableOpacity>
-        </View>
+        <Input 
+          autoCapitalize="none"
+          value={lastName}
+          placeholder="Last Name"
+          onChangeText={(lastName) => setLastName(lastName)}
+          w={{ base: "75%", md: "25%" }}
+        />
+
+        <Input 
+          autoCapitalize="none"
+          value={emailAddress}
+          placeholder="Email"
+          onChangeText={(emailAddress) => setEmailAddress(emailAddress)}
+          w={{ base: "75%", md: "25%" }}
+        />
+
+        <Input 
+          value={password}
+          secureTextEntry={hidden}
+          placeholder="Password"
+          onChangeText={(password) => setPassword(password)}
+          w={{ base: "75%", md: "25%" }}
+          InputRightElement={
+            <Pressable onPress={() => setHidden(!hidden)}>
+              <Icon as={<MaterialIcons name={hidden ? "visibility-off" : "visibility"} />} size={5} mr="2" color="muted.400" />
+            </Pressable>
+          }
+        />
+
+        <Link href="/sign/in">
+          Already have an account? Sign in
+        </Link>
+
+        <Button 
+          onPress={onSignUp} 
+          endIcon={<Icon as={MaterialIcons} name="person-add" size="sm" color="muted.400" />}
+        >
+          Sign up
+        </Button>
+      </>
       )}
-    </View>
+      {pendingVerification && (
+      <>
+        <Input
+          value="code"
+          placeholder="Code"
+          onChangeText={(code) => setCode(code)}
+          w={{ base: "75%", md: "25%" }}
+        />
+
+        <Button
+          onPress={onVerify}
+          endIcon={<Icon as={MaterialIcons} name="verified-user" size="sm" color="muted.400" />}
+        >
+          Verify Email
+        </Button>
+      </>
+      )}
+    </Stack>
   );
 }

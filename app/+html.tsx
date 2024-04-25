@@ -11,18 +11,23 @@ export default function Root({ children }: { children: React.ReactNode }) {
         <meta charSet="utf-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-
-        {/* 
-          Disable body scrolling on web. This makes ScrollView components work closer to how they do on native. 
-          However, body scrolling is often nice to have for mobile web. If you want to enable it, remove this line.
-        */}
-        <ScrollViewStyleReset />
-
-        {/* Using raw CSS styles as an escape-hatch to ensure the background color never flickers in dark-mode. */}
-        <style dangerouslySetInnerHTML={{ __html: responsiveBackground }} />
-        {/* Add any additional <head> elements that you want globally available on web... */}
+        <meta name="copyright" content="Michał Wieczorek" />
+        <meta name="author" content="Michał Wieczorek, mwiemszra@gmail.com" />
+        <meta name="language" content="EN" />
+        <meta name="robots" content="index,follow" />
+        <meta name="description" content="" />
+        <meta name="og:description" content="" />
+        <meta name="keywords" content="" />
+        <meta name="pagename" content="PrintSpot" />
+        <meta name="og:site_name" content="PrintSpot" />
+        <meta name="og:title" content="PrintSpot |" />
+        <title>PrintSpot |</title>
+        <style dangerouslySetInnerHTML={{ __html: responsiveBackground }} /> {/* Responsive background color */}
+        <ScrollViewStyleReset /> {/* Disable scroll for the whole page */}
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+      </body>
     </html>
   );
 }
