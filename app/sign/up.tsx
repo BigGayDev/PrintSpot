@@ -7,7 +7,7 @@ import { Link } from 'expo-router';
 // Clerk 
 import { useSignUp } from '@clerk/clerk-expo';
 
-export default function SignUp() { // ! Fix this
+export default function SignUp() {
   // UI hooks
   const [hidden, setHidden] = useState(true);
   // Clerk hooks

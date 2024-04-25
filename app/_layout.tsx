@@ -30,22 +30,22 @@ export const unstable_settings = {
 SplashScreen.preventAutoHideAsync();
 
 // Token cache
-const tokenCache = { // ! Fix this
-  async getToken(key: string) {
-    try {
-      return SecureStore.getItemAsync(key);
-    } catch (err) {
-      return null;
-    }
-  },
-  async saveToken(key: string, value: string) {
-    try {
-      return SecureStore.setItemAsync(key, value);
-    } catch (err) {
-      return;
-    }
-  },
-};
+// const tokenCache = { // ! Fix this
+//   async getToken(key: string) {
+//     try {
+//       return SecureStore.getItemAsync(key);
+//     } catch (err) {
+//       return null;
+//     }
+//   },
+//   async saveToken(key: string, value: string) {
+//     try {
+//       return SecureStore.setItemAsync(key, value);
+//     } catch (err) {
+//       return;
+//     }
+//   },
+// };
 
 
 export default function RootLayout() {
@@ -66,23 +66,19 @@ export default function RootLayout() {
   if (!loaded) return null;
 
   return (
-    <ClerkProvider tokenCache={tokenCache} publishableKey={CLERK_PUBLISHABLE_KEY!}>
+    <ClerkProvider /*tokenCache={tokenCache}*/ publishableKey={CLERK_PUBLISHABLE_KEY!}>
       <RootLayoutNav />
     </ClerkProvider>
   );
 }
 
 function RootLayoutNav() {
-  // const colorScheme = useColorScheme(); // ! Fix this
-
   return (
-    // <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
     <NativeBaseProvider>
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
       </Stack>
     </NativeBaseProvider>
-    // </ThemeProvider>
   );
 }

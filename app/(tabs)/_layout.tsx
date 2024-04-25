@@ -8,6 +8,7 @@ import { useClientOnlyValue } from '@/components/useClientOnlyValue';
 import { useUser } from "@clerk/clerk-expo";
 import { Avatar, Icon } from "native-base";
 import { MaterialIcons } from '@expo/vector-icons';
+import { Pressable } from 'react-native';
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
@@ -22,16 +23,20 @@ function ProfileIcon() { // ! Fix onClick doesn't work on phones (use ExternalLi
 
   if (!isLoaded || !isSignedIn) return (
     <Link href="/sign/in" asChild>
-      <Avatar bg="white">
-        <MaterialIcons name="supervised-user-circle" size={56} color="black" />
-      </Avatar>
+      <Pressable>
+        <Avatar bg="white">
+          <MaterialIcons name="supervised-user-circle" size={56} color="black" />
+        </Avatar>
+      </Pressable>
     </Link>
   );
   else return (
     <Link href="/modal" asChild> {/* Edit this using clerk account portal */}
-      <Avatar bg="indigo.500" source={{ uri: user?.imageUrl }}>
-        {(user.firstName || user.lastName) && user.firstName[0] + user.lastName[0]} 
-      </Avatar>
+      <Pressable>
+        <Avatar bg="indigo.500" source={{ uri: user?.imageUrl }}>
+          {(user.firstName || user.lastName) && user.firstName[0] + user.lastName[0]} 
+        </Avatar>
+      </Pressable>
     </Link>
   );
 }
